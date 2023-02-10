@@ -4,10 +4,10 @@ from math import log2, ceil
 # representations.
 
 class bitsarray():
-    """A big endian array representation of bits.
+    """A big endian bits array representation.
     """
     
-    def __init__(self, integer_value, pad_to=0, max_bits=None):
+    def __init__(self, integer_value, pad_to=0, bytes_align=False, max_bits=None):
         """Takes an integer and returns its bitsarray representation.
 
         Args:
@@ -15,6 +15,8 @@ class bitsarray():
             pad_to (int, optional): If the length of the representation is 
             smaller than pad_to, pad the array with 0bits to the left 
             until the length is equal to pad_to. Defaults to 0.
+            bytes_align(bool, optional): Make the bits representation a length which
+            is a multiple of 8. Will override pad_to. Defaults to False.
             max_bits (int, optional): If the length of the representation is 
             greater than max_bits, truncate the array (from the left) so that
             its length is max_bits. 
@@ -22,6 +24,15 @@ class bitsarray():
         """
         self.bits_list = []
         self._int_to_bits(integer_value)
+
+        # If we align to bytes, 
+        if bytes_align:
+            # Get the number of bits
+            bits_num = len(self)
+            bytes_num = ceil(bits_num / 8)
+            # Major it to the closest multiple of 8 higher than that number of bits
+            pad_to = bytes_num * 8
+            
 
         if len(self.bits_list) < pad_to:
             for _ in range(pad_to - len(self.bits_list)):
@@ -46,6 +57,9 @@ class bitsarray():
     def __len__(self) -> int:
         return len(self.bits_list)
 
+    def __getitem__(self, index):
+        return self.bits_list[index]
+
 
     def index(self, value) -> int:
         """Returns the index of the first occurence of 'value' in the array. 
@@ -66,7 +80,7 @@ class bitsarray():
         Args:
             integer_value (int): The integer value of the desired bitsarray
         """
-        array_len = int(ceil(log2(integer_value)))
+        array_len = int(ceil(log2(integer_value + 1)))
         
         self.bits_list = [0 for _ in range(array_len)]
 
@@ -135,6 +149,7 @@ if __name__ == '__main__':
     b = bitsarray(12, pad_to=7)
     c = bitsarray(113)
     d = bitsarray(113, max_bits=5)
+    e = bitsarray(256, bytes_align=True)
     print(a.to_int())
     print(f'test __str__: {a}')
     a.pad_right(13)
@@ -145,3 +160,6 @@ if __name__ == '__main__':
     print(f'default int=113: {c}')
     print(f'133 truncated to 5 bits: {d.to_int()}')
     print(f'same: {d}')
+    print(f'Test bytes_align: {e}')
+    print(len(e))
+    print(f'Test __getitem__: {e[6:9]}')
