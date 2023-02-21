@@ -25,7 +25,7 @@ class bitsarray():
         
         # Does not support negative values so far
         if integer_value < 0:
-            raise ValueError('Bitsarray does not support negative integet values so far')
+            raise ValueError('Bitsarray does not support negative integer values so far')
         
         self.bits_list = []
         self._int_to_bits(integer_value)
@@ -220,7 +220,8 @@ class bitsarray():
         return bitsarray(
             self.to_int() * right_operand, 
             pad_to=output_size, 
-            bytes_align=bytes_align
+            bytes_align=bytes_align,
+            max_bits=output_size
             )
 
     
