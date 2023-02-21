@@ -49,9 +49,10 @@ class bitsarray():
 
 
     def __str__(self) -> str:
-        str_output = str(self.to_int()) + ': '
+        str_output = ''
         for bit in self.bits_list:
             str_output += str(bit)
+        str_output += ' : ' + str(self.to_int())
         return str_output
 
 
