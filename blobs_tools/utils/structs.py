@@ -22,6 +22,11 @@ class bitsarray():
             its length is max_bits. 
             Defaults to None.
         """
+        
+        # Does not support negative values so far
+        if integer_value < 0:
+            raise ValueError('Bitsarray does not support negative integet values so far')
+        
         self.bits_list = []
         self._int_to_bits(integer_value)
 
@@ -44,7 +49,7 @@ class bitsarray():
 
 
     def __str__(self) -> str:
-        str_output = ''
+        str_output = str(self.to_int()) + ': '
         for bit in self.bits_list:
             str_output += str(bit)
         return str_output
@@ -141,6 +146,153 @@ class bitsarray():
         for _ in range(shift):
             self.bits_list = self.bits_list[:-1]
             self.bits_list.insert(0, 0)
+
+
+    def add(self, right_operand, output_size=0, bytes_align=False):
+        """Addition between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to add.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the addition, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+        max_size = output_size
+
+        if output_size == 0:
+            output_size = len(self)
+            max_size = None
+
+        return bitsarray(
+            self.to_int() + right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align,
+            max_bits=max_size
+            )
+
+
+    def sub(self, right_operand, output_size=0, bytes_align=False):
+        """Substraction between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to substract.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the substraction, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+
+        if output_size == 0:
+            output_size = len(self)
+
+        return bitsarray(
+            self.to_int() - right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align
+            )
+
+
+    def mul(self, right_operand, output_size=0, bytes_align=False):
+        """Multiplication between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to multiply.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the multiplication, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+
+        if output_size == 0:
+            output_size = len(self)
+            
+        return bitsarray(
+            self.to_int() * right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align
+            )
+
+    
+    def bit_and(self, right_operand, output_size=0, bytes_align=False):
+        """Bitwise and operation between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to and.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the multiplication, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+
+        if output_size == 0:
+            output_size = len(self)
+            
+        return bitsarray(
+            self.to_int() & right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align
+            )
+
+
+    def bit_or(self, right_operand, output_size=0, bytes_align=False):
+        """Bitwise or operation between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to or.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the multiplication, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+
+        if output_size == 0:
+            output_size = len(self)
+            
+        return bitsarray(
+            self.to_int() | right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align
+            )
+
+
+    def bit_xor(self, right_operand, output_size=0, bytes_align=False):
+        """Bitwise xor operation between a bitsarray and an integer value.
+
+        Args:
+            right_operand (int): Value to xor.
+            output_size (int, optional): The desired size of the resulting bitsarray. If the specified 
+            size is smaller than the result of the multiplication, the result will be truncated. If 0, 
+            pads to the current length of the bits array.
+            bytes_align (bool, optional): Pad to the nearest multiple of 8. Defaults to False.
+
+        Returns:
+            bitsarray: The result is a new bitsarray representing the result of the operation.
+        """
+
+        if output_size == 0:
+            output_size = len(self)
+            
+        return bitsarray(
+            self.to_int() ^ right_operand, 
+            pad_to=output_size, 
+            bytes_align=bytes_align
+            )
 
 
 if __name__ == '__main__':
