@@ -213,15 +213,17 @@ class bitsarray():
         Returns:
             bitsarray: The result is a new bitsarray representing the result of the operation.
         """
+        max_size = output_size
 
         if output_size == 0:
             output_size = len(self)
+            max_size = None
             
         return bitsarray(
             self.to_int() * right_operand, 
             pad_to=output_size, 
             bytes_align=bytes_align,
-            max_bits=output_size
+            max_bits=max_size
             )
 
     
@@ -317,3 +319,4 @@ if __name__ == '__main__':
     print(f'Test bytes_align: {e}')
     print(len(e))
     print(f'Test __getitem__: {e[6:9]}')
+    print(b.mul(d.to_int(), output_size=6))
